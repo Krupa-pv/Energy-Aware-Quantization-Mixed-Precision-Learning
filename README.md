@@ -8,9 +8,7 @@
 ## Overview
 Deep learning models—especially Vision Transformers—continue to grow in size, increasing compute cost, memory bandwidth, latency, and total energy consumption:
 
-\[
-E = N_{\text{MAC}}E_{\text{MAC}} + N_{\text{mem}}E_{\text{DRAM}}
-\]
+E = N_MAC * E_MAC + N_mem * E_DRAM
 
 This project explores **post-training quantization (PTQ)** and **mixed-precision inference** as lightweight, training-free methods for improving energy efficiency while preserving accuracy.
 
@@ -51,9 +49,7 @@ Ranking-aware quantization to preserve ordering in attention scores.
 
 Layer sensitivity:
 
-\[
-S_l = \|y_l^{\text{full}} - y_l^{\text{quant}}\|_2
-\]
+S_l = || y_full - y_quant ||_2
 
 Bitwidth assignment:
 - **High sensitivity → 8-bit**
@@ -81,13 +77,11 @@ Requires a single calibration pass.
 
 ### Energy Modeling
 
-\[
-E = \sum_l N^{(l)}_{\text{MAC}} E_{\text{MAC}}(b_l)
-  + \sum_l N^{(l)}_{\text{mem}} E_{\text{DRAM}}(b_l)
-\]
+E = Σ_l [ N_MAC(l) * E_MAC(b_l) ] + Σ_l [ N_mem(l) * E_DRAM(b_l) ]
 
-- \(E_{\text{MAC}}(b) \propto b^2\)  
-- \(E_{\text{DRAM}}(b) \propto b\)
+where:
+E_MAC(b) ∝ b^2
+E_DRAM(b) ∝ b
 
 ### Pareto Frontier
 We will compare:
