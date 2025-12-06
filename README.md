@@ -1,5 +1,4 @@
 # Energy-Aware-Quantization-Mixed-Precision-Learning
-# Energy-Aware Quantization and Mixed-Precision Learning
 
 ## Team
 - **Salma Bhar (sxb1283)** – Primary Contact  
