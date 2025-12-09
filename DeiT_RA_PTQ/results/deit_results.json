@@ -1,0 +1,49 @@
+{
+  "metadata": {
+    "date": "2025-12-09 01:11:14",
+    "model": "DeiT-Tiny",
+    "parameters_M": 5.72,
+    "dataset": "ImageNet-1K (1000 classes)",
+    "calibration_samples": 1000,
+    "test_samples": 10000,
+    "device": "cpu"
+  },
+  "baseline": {
+    "top1_accuracy": 85.34,
+    "top5_accuracy": 97.32,
+    "inference_time": 80.38,
+    "throughput": 124.4
+  },
+  "quantized": {
+    "8bit": {
+      "top1_accuracy": 85.1,
+      "top5_accuracy": 97.26,
+      "accuracy_drop": 0.24,
+      "inference_time": 77.38,
+      "speedup": 1.04,
+      "throughput": 129.2,
+      "layers_quantized": 49,
+      "theoretical_energy_reduction": 86.2
+    },
+    "6bit": {
+      "top1_accuracy": 85.01,
+      "top5_accuracy": 97.18,
+      "accuracy_drop": 0.33,
+      "inference_time": 80.51,
+      "speedup": 1.0,
+      "throughput": 124.2,
+      "layers_quantized": 49,
+      "theoretical_energy_reduction": 90.4
+    },
+    "4bit": {
+      "top1_accuracy": 83.04,
+      "top5_accuracy": 96.3,
+      "accuracy_drop": 2.3,
+      "inference_time": 100.68,
+      "speedup": 0.8,
+      "throughput": 99.3,
+      "layers_quantized": 49,
+      "theoretical_energy_reduction": 94.1
+    }
+  }
+}
