@@ -1,0 +1,18 @@
+[Running] PTQ for 8-bit
+Files already downloaded and verified
+Calibration complete for 8-bit
+Files already downloaded and verified
+Accuracy: 61.32%
+Saved → resnet18_ptq_8bit.pth
+[Running] PTQ for 6-bit
+Files already downloaded and verified
+Calibration complete for 6-bit
+Files already downloaded and verified
+Accuracy: 60.42%
+Saved → resnet18_ptq_6bit.pth
+[Running] PTQ for 4-bit
+Files already downloaded and verified
+Calibration complete for 4-bit
+Files already downloaded and verified
+Accuracy: 38.04%
+Saved → resnet18_ptq_4bit.pth
