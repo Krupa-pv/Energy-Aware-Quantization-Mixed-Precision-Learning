@@ -1,0 +1,18 @@
+{
+    "fp32": {
+        "accuracy": 0.6144,
+        "energy": "TO BE CALCULATED"
+    },
+    "ptq_8": {
+        "accuracy": 0.6132,
+        "energy": "TO BE CALCULATED"
+    },
+    "ptq_6": {
+        "accuracy": 0.6042,
+        "energy": "TO BE CALCULATED"
+    },
+    "ptq_4": {
+        "accuracy": 0.3804,
+        "energy": "TO BE CALCULATED"
+    }
+}
