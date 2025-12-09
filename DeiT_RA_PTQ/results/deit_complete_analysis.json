@@ -1,0 +1,78 @@
+{
+  "metadata": {
+    "date": "2025-12-09 01:19:38",
+    "model": "DeiT-Tiny",
+    "parameters_M": 5.72,
+    "dataset": "ImageNet-1K",
+    "calibration_samples": 1000,
+    "test_samples": 10000,
+    "device": "cpu"
+  },
+  "baseline": {
+    "top1_accuracy": 85.34,
+    "top5_accuracy": 97.32
+  },
+  "sensitivity_analysis": {
+    "total_layers": 49,
+    "bit_distribution": {
+      "4": 16,
+      "6": 16,
+      "8": 17
+    },
+    "top_5_sensitive": {
+      "blocks.8.mlp.fc2": 0.28,
+      "blocks.7.mlp.fc2": 0.23,
+      "blocks.9.mlp.fc2": 0.22,
+      "blocks.6.mlp.fc2": 0.2,
+      "blocks.5.mlp.fc2": 0.19
+    },
+    "top_5_robust": {
+      "blocks.8.attn.proj": 0.06,
+      "blocks.5.attn.proj": 0.06,
+      "blocks.4.attn.proj": 0.06,
+      "blocks.2.attn.proj": 0.06,
+      "blocks.7.attn.proj": 0.06
+    }
+  },
+  "quantization_comparison": {
+    "8bit": {
+      "standard_ptq": {
+        "top1_accuracy": 85.1,
+        "top5_accuracy": 97.26,
+        "accuracy_drop": 0.24
+      },
+      "ranking_aware_ptq": {
+        "top1_accuracy": 85.18,
+        "top5_accuracy": 97.22,
+        "accuracy_drop": 0.16
+      },
+      "improvement": 0.08
+    },
+    "6bit": {
+      "standard_ptq": {
+        "top1_accuracy": 85.01,
+        "top5_accuracy": 97.18,
+        "accuracy_drop": 0.33
+      },
+      "ranking_aware_ptq": {
+        "top1_accuracy": 85.11,
+        "top5_accuracy": 97.18,
+        "accuracy_drop": 0.23
+      },
+      "improvement": 0.1
+    },
+    "4bit": {
+      "standard_ptq": {
+        "top1_accuracy": 83.04,
+        "top5_accuracy": 96.3,
+        "accuracy_drop": 2.3
+      },
+      "ranking_aware_ptq": {
+        "top1_accuracy": 74.9,
+        "top5_accuracy": 93.01,
+        "accuracy_drop": 10.44
+      },
+      "improvement": -8.14
+    }
+  }
+}

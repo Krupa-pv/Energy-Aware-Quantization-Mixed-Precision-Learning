@@ -1,0 +1,72 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Data and models
+data/
+*.pth
+*.pt
+*.ckpt
+
+# Demo/helper scripts
+demo_*.py
+run_complete*.py
+run_simple*.py
+run_real*.py
+get_*.py
+
+# Documentation
+*RESUME*.md
+*COMPLETE*.md
+*INSTRUCTIONS*.md
+*GUIDE*.md
+*QUICK*.md
+GIT_PUSH_PLAN.md
+
+# Results (add selectively)
+results/demo_*.json
+results/*SUMMARY*.txt
+results/verified_*.json
+results/complete_*.json
+results/real_*.json
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+logs/
