@@ -108,7 +108,5 @@ A **surprising observation** was that DeiT-Tiny proved remarkably robust to quan
 | Missing SOTA comparisons | Methodological | Compare with GPTQ, AWQ, SmoothQuant; add ablations |
 | 4-bit accuracy collapse | Model/Implementation | LSQ, asymmetric quantization, outlier handling |
 
----
 
-*This document addresses the requirements of Lab 4 for ECSE 397/600: Efficient Deep Learning.*
 
