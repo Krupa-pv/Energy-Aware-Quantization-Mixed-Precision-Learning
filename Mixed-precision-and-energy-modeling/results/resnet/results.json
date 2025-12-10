@@ -1,0 +1,69 @@
+{
+  "model": "ResNet-18",
+  "dataset": "CIFAR-100",
+  "timestamp": "2025-12-09T18:32:16.494763",
+  "energy_results": {
+    "FP32": {
+      "total_energy": 9644247296.0,
+      "mac_energy": 593002496.0,
+      "memory_energy": 9051244800.0,
+      "relative_energy": 1.0,
+      "energy_savings": 0.0
+    },
+    "8-bit": {
+      "total_energy": 2299873856.0,
+      "mac_energy": 37062656.0,
+      "memory_energy": 2262811200.0,
+      "relative_energy": 0.23847105796985155,
+      "energy_savings": 0.7615289420301484
+    },
+    "6-bit": {
+      "total_energy": 1717956144.0,
+      "mac_energy": 20847744.0,
+      "memory_energy": 1697108400.0,
+      "relative_energy": 0.17813273460050438,
+      "energy_savings": 0.8218672653994956
+    },
+    "4-bit": {
+      "total_energy": 1140671264.0,
+      "mac_energy": 9265664.0,
+      "memory_energy": 1131405600.0,
+      "relative_energy": 0.11827478381574673,
+      "energy_savings": 0.8817252161842533
+    },
+    "Mixed": {
+      "total_energy": 1378492992.0,
+      "mac_energy": 22177792.0,
+      "memory_energy": 1356315200.0,
+      "relative_energy": 0.14293422282646537,
+      "energy_savings": 0.8570657771735346
+    }
+  },
+  "pareto_data": {
+    "FP32": {
+      "accuracy": 61.44,
+      "energy": 1.0
+    },
+    "8-bit": {
+      "accuracy": 61.32,
+      "energy": 0.23847105796985155
+    },
+    "6-bit": {
+      "accuracy": 60.42,
+      "energy": 0.17813273460050438
+    },
+    "4-bit": {
+      "accuracy": 38.04,
+      "energy": 0.11827478381574673
+    },
+    "Mixed": {
+      "accuracy": 60.8,
+      "energy": 0.14293422282646537
+    }
+  },
+  "bitwidth_distribution": {
+    "4": 6,
+    "6": 9,
+    "8": 6
+  }
+}
