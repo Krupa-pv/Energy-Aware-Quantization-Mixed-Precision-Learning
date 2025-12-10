@@ -27,14 +27,10 @@
 \title{Energy-Aware Quantization and Mixed-Precision Learning for Vision Models}
 
 \author{
-  Salma Bhar \\
-  \texttt{sxb1283@psu.edu} \\
-  \And
-  Wiam Skakri \\
-  \texttt{wxs428@psu.edu} \\
-  \And
-  Krupa Venkatesan \\
-  \texttt{kxv178@psu.edu} \\
+  Salma Bhar \quad
+  Wiam Skakri \quad
+  Krupa Venkatesan \\[0.5em]
+  \texttt{\{sxb1283, wxs428, kxv178\}@case.edu}
 }
 
 \begin{document}
@@ -45,7 +41,7 @@
 % ABSTRACT
 %==============================================================================
 \begin{abstract}
-As deep learning models scale in size and complexity, their energy consumption during inference has become a critical concern for deployment on edge devices and large-scale data centers. In this work, we investigate post-training quantization (PTQ) and sensitivity-based mixed-precision inference as lightweight approaches for improving the energy efficiency of vision models. We evaluate our methods on ResNet-18 (CIFAR-100) and DeiT-Tiny (ImageNet), applying uniform quantization at 8-bit, 6-bit, and 4-bit precisions, as well as a mixed-precision scheme that assigns bitwidths based on layer-wise sensitivity analysis. For Vision Transformers, we also implement and evaluate ranking-aware quantization that preserves attention score orderings. Using an analytical energy model that accounts for both MAC operations and memory access, we demonstrate energy reductions of up to 88\% at 4-bit precision. Our mixed-precision configuration achieves 85.7\% energy reduction on ResNet-18 while maintaining 99\% of baseline accuracy. For DeiT-Tiny, ranking-aware PTQ provides +0.08-0.10\% accuracy improvements at 8/6-bit precision, and our layer sensitivity analysis reveals that MLP layers are 4.7× more sensitive than attention projections. We observe that DeiT-Tiny exhibits remarkable robustness to quantization, maintaining 85.01\% accuracy at 6-bit precision with only a 0.33 percentage point drop from FP32. Our findings highlight the potential of training-free quantization approaches for energy-efficient deployment, while also revealing the limitations of aggressive quantization without additional optimization techniques.
+As deep learning models scale in size and complexity, their energy consumption during inference has become a critical concern for deployment on edge devices and large-scale data centers. In this work, we investigate post-training quantization (PTQ) and sensitivity-based mixed-precision inference as lightweight approaches for improving the energy efficiency of vision models. We evaluate our methods on ResNet-18 (CIFAR-100) and DeiT-Tiny (ImageNet), applying uniform quantization at 8-bit, 6-bit, and 4-bit precisions, as well as a mixed-precision scheme that assigns bitwidths based on layer-wise sensitivity analysis. For Vision Transformers, we also implement and evaluate ranking-aware quantization that preserves attention score orderings. Using an analytical energy model that accounts for both MAC operations and memory access, we demonstrate energy reductions of up to 88\% at 4-bit precision. Our mixed-precision configuration achieves 85.7\% energy reduction on ResNet-18 while maintaining 99\% of baseline accuracy. For DeiT-Tiny, ranking-aware PTQ provides +0.08-0.10\% accuracy improvements at 8/6-bit precision, and our layer sensitivity analysis reveals that MLP layers are 4.7$\times$ more sensitive than attention projections. We observe that DeiT-Tiny exhibits remarkable robustness to quantization, maintaining 85.01\% accuracy at 6-bit precision with only a 0.33 percentage point drop from FP32. Our findings highlight the potential of training-free quantization approaches for energy-efficient deployment, while also revealing the limitations of aggressive quantization without additional optimization techniques.
 \end{abstract}
 
 %==============================================================================
@@ -60,9 +56,9 @@ The total energy consumption of neural network inference can be decomposed into 
 E = N_{\text{MAC}} \cdot E_{\text{MAC}} + N_{\text{mem}} \cdot E_{\text{DRAM}}
 \label{eq:energy_basic}
 \end{equation}
-where $N_{\text{MAC}}$ is the number of multiply-accumulate operations, $E_{\text{MAC}}$ is the energy per MAC, $N_{\text{mem}}$ is the number of memory accesses, and $E_{\text{DRAM}}$ is the energy per memory access. Critically, memory access dominates energy consumption in modern systems—a 32-bit DRAM access consumes approximately 200× more energy than a 32-bit floating-point multiply~\cite{horowitz2014energy}.
+where $N_{\text{MAC}}$ is the number of multiply-accumulate operations, $E_{\text{MAC}}$ is the energy per MAC, $N_{\text{mem}}$ is the number of memory accesses, and $E_{\text{DRAM}}$ is the energy per memory access. Critically, memory access dominates energy consumption in modern systems, a 32-bit DRAM access consumes approximately 200$\times$ more energy than a 32-bit floating-point multiply~\cite{horowitz2014energy}.
 
-\textbf{Quantization} addresses this challenge by reducing the numerical precision of weights and activations, which decreases both memory footprint and computational cost. Post-training quantization (PTQ) is particularly attractive as it requires no retraining—only a small calibration dataset is needed to determine quantization parameters.
+Quantization addresses this challenge by reducing the numerical precision of weights and activations, which decreases both memory footprint and computational cost. Post-training quantization (PTQ) is particularly attractive as it requires no retraining, only a small calibration dataset is needed to determine quantization parameters.
 
 \textbf{Our Contributions:}
 \begin{enumerate}
@@ -117,7 +113,7 @@ where the scale factor $s$ is determined during calibration:
 s = \frac{\max(|x|)}{2^{b-1} - 1}
 \end{equation}
 
-We apply \textbf{per-channel quantization} for weights (separate scale per output channel) and \textbf{per-tensor quantization} for activations, following best practices~\cite{krishnamoorthi2018whitepaper}.
+We apply per-channel quantization for weights (separate scale per output channel) and per-tensor quantization for activations, following best practices~\cite{krishnamoorthi2018whitepaper}.
 
 \subsection{Sensitivity Analysis}
 
@@ -150,8 +146,8 @@ E = \sum_l N_{\text{MAC}}^{(l)} \cdot E_{\text{MAC}}(b_l) + \sum_l N_{\text{mem}
 
 Based on hardware studies~\cite{horowitz2014energy, spingarn2023energy}, we model:
 \begin{itemize}
-    \item \textbf{MAC energy}: $E_{\text{MAC}}(b) \propto b^2$ — energy scales quadratically with bitwidth due to multiplier area scaling.
-    \item \textbf{Memory energy}: $E_{\text{DRAM}}(b) \propto b$ — energy scales linearly with bitwidth due to data transfer volume.
+    \item \textbf{MAC energy}: $E_{\text{MAC}}(b) \propto b^2$ as energy scales quadratically with bitwidth due to multiplier area scaling.
+    \item \textbf{Memory energy}: $E_{\text{DRAM}}(b) \propto b$ as energy scales linearly with bitwidth due to data transfer volume.
 \end{itemize}
 
 For our baseline configuration, we use a MAC-to-memory energy ratio of 1:200, reflecting the dominance of memory access energy in modern systems.
@@ -171,7 +167,7 @@ We evaluate two representative architectures:
 
 \subsection{Experimental Setup}
 
-\textbf{Datasets:} We use CIFAR-100 (100 classes, 32×32 images) for ResNet-18 and ImageNet-1K (1000 classes, 224×224 images) for DeiT-Tiny. For calibration, we use 256 randomly sampled training images. For evaluation, we use the full CIFAR-100 test set (10,000 images) and a 10,000-image subset of ImageNet validation.
+\textbf{Datasets:} We use CIFAR-100 (100 classes, $32\times32$ images) for ResNet-18 and ImageNet-1K (1000 classes, $224\times224$ images) for DeiT-Tiny. For calibration, we use 256 randomly sampled training images. For evaluation, we use the full CIFAR-100 test set (10,000 images) and a 10,000-image subset of ImageNet validation.
 
 \textbf{Implementation:} All experiments are conducted in PyTorch. We use the \texttt{timm} library~\cite{rw2019timm} for DeiT-Tiny pretrained weights. Quantization is applied to all linear and convolutional layers, excluding the first and last layers following common practice.
 
@@ -179,7 +175,7 @@ We evaluate two representative architectures:
 
 \subsection{Main Results}
 
-\begin{table}[t]
+\begin{table}[htb]
 \centering
 \caption{Quantization results for ResNet-18 on CIFAR-100. Energy is reported relative to FP32 baseline.}
 \label{tab:resnet_results}
@@ -187,7 +183,7 @@ We evaluate two representative architectures:
 \toprule
 \textbf{Config} & \textbf{Accuracy (\%)} & \textbf{$\Delta$ Acc.} & \textbf{Rel. Energy} & \textbf{Energy Savings} \\
 \midrule
-FP32 (baseline) & 61.44 & — & 1.00 & — \\
+FP32 (baseline) & 61.44 & --- & 1.00 & --- \\
 8-bit PTQ & 61.32 & -0.12 & 0.238 & 76.2\% \\
 6-bit PTQ & 60.42 & -1.02 & 0.178 & 82.2\% \\
 4-bit PTQ & 38.04 & -23.40 & 0.118 & 88.2\% \\
@@ -197,15 +193,15 @@ FP32 (baseline) & 61.44 & — & 1.00 & — \\
 \end{tabular}
 \end{table}
 
-\begin{table}[t]
+\begin{table}[htb]
 \centering
-\caption{Quantization results for DeiT-Tiny on ImageNet (10K validation subset).}
+\caption{Quantization results for DeiT-Tiny on ImageNet.}
 \label{tab:deit_results}
 \begin{tabular}{lccccc}
 \toprule
 \textbf{Config} & \textbf{Accuracy (\%)} & \textbf{$\Delta$ Acc.} & \textbf{Rel. Energy} & \textbf{Energy Savings} \\
 \midrule
-FP32 (baseline) & 85.34 & — & 1.00 & — \\
+FP32 (baseline) & 85.34 & --- & 1.00 & --- \\
 8-bit PTQ & 85.10 & -0.24 & 0.241 & 75.9\% \\
 6-bit PTQ & 85.01 & -0.33 & 0.180 & 82.0\% \\
 4-bit PTQ & 83.04 & -2.30 & 0.120 & 88.0\% \\
@@ -219,13 +215,13 @@ Tables~\ref{tab:resnet_results} and~\ref{tab:deit_results} present our main quan
 
 \textbf{8-bit quantization is nearly lossless.} Both models maintain near-baseline accuracy with 8-bit PTQ ($-0.12\%$ for ResNet-18, $-0.24\%$ for DeiT-Tiny) while achieving approximately 76\% energy reduction.
 
-\textbf{DeiT-Tiny is remarkably robust to quantization.} Even at 4-bit precision, DeiT-Tiny loses only 2.3 percentage points, compared to ResNet-18's catastrophic 23.4 point drop. This suggests that the self-attention mechanism and layer normalization in transformers provide inherent regularization that improves quantization tolerance.
+\textbf{DeiT-Tiny is remarkably robust to quantization.} Even at 4-bit precision, DeiT-Tiny loses only 2.3 percentage points, compared to ResNet-18's 23.4 point drop. This suggests that the self-attention mechanism and layer normalization in transformers provide inherent regularization that improves quantization tolerance.
 
-\textbf{Mixed-precision achieves the best accuracy-energy trade-off.} Our sensitivity-based mixed-precision configuration achieves 85.7\% energy reduction for ResNet-18 with only 0.64\% accuracy loss—substantially better than 4-bit PTQ which sacrifices 23.4\% accuracy for an additional 2.5\% energy savings.
+\textbf{Mixed-precision achieves the best accuracy-energy trade-off.} Our sensitivity-based mixed-precision configuration achieves 85.7\% energy reduction for ResNet-18 with only 0.64\% accuracy loss which is substantially better than 4-bit PTQ which sacrifices 23.4\% accuracy for an additional 2.5\% energy savings.
 
 \subsection{Energy Breakdown Analysis}
 
-\begin{figure}[t]
+\begin{figure}[htbp]
 \centering
 \begin{subfigure}[b]{0.48\textwidth}
     \centering
@@ -242,11 +238,11 @@ Tables~\ref{tab:resnet_results} and~\ref{tab:deit_results} present our main quan
 \label{fig:energy_breakdown}
 \end{figure}
 
-Figure~\ref{fig:energy_breakdown} shows the energy breakdown between MAC operations and memory access. Memory energy dominates in all configurations, accounting for 93-99\% of total energy. This validates our energy model's assumption of memory-dominated inference and explains why even modest bitwidth reductions yield substantial energy savings—reducing from 32-bit to 8-bit quarters the memory transfer volume.
+Figure~\ref{fig:energy_breakdown} shows the energy breakdown between MAC operations and memory access. Memory energy dominates in all configurations, accounting for 93-99\% of total energy. This validates our energy model's assumption of memory-dominated inference and explains why even modest bitwidth reductions yield substantial energy savings---reducing from 32-bit to 8-bit quarters the memory transfer volume.
 
 \subsection{Pareto Frontier Analysis}
 
-\begin{figure}[t]
+\begin{figure}[htbp]
 \centering
 \begin{subfigure}[b]{0.48\textwidth}
     \centering
@@ -267,7 +263,7 @@ Figure~\ref{fig:pareto} presents the Pareto frontiers for both models. For ResNe
 
 \subsection{Mixed-Precision Bitwidth Distribution}
 
-\begin{table}[t]
+\begin{table}[htbp]
 \centering
 \caption{Bitwidth distribution in mixed-precision configurations.}
 \label{tab:bitwidth_dist}
@@ -287,7 +283,7 @@ Table~\ref{tab:bitwidth_dist} shows the bitwidth distribution resulting from our
 
 To address the unique challenges of quantizing Vision Transformers, we implemented and evaluated ranking-aware quantization~\cite{liu2021ptqvit}, which preserves the relative ordering of attention scores during quantization. This is critical because the self-attention mechanism relies on ranking relationships rather than absolute values.
 
-\begin{table}[t]
+\begin{table}[htbp]
 \centering
 \caption{Comparison of standard PTQ vs. ranking-aware PTQ for DeiT-Tiny on ImageNet.}
 \label{tab:ranking_aware}
@@ -306,11 +302,11 @@ Table~\ref{tab:ranking_aware} presents our ranking-aware quantization results. K
 
 \textbf{Consistent improvements at moderate precision.} Ranking-aware PTQ provides measurable improvements at 8-bit (+0.08\%) and 6-bit (+0.10\%), reducing accuracy loss by approximately 30-33\% relative to standard PTQ. This validates the hypothesis that preserving attention score rankings helps maintain model performance under quantization.
 
-\textbf{Catastrophic failure at extreme quantization.} At 4-bit precision, ranking-aware PTQ performs significantly worse than standard PTQ (-8.14\% difference), dropping from 83.04\% to 74.90\%. This occurs because 4-bit precision (only 16 discrete values) cannot simultaneously satisfy ranking constraints and represent the dynamic range needed for attention scores, leading to over-constrained optimization.
+\textbf{Failure at extreme quantization.} At 4-bit precision, ranking-aware PTQ performs significantly worse than standard PTQ (-8.14\% difference), dropping from 83.04\% to 74.90\%. This occurs because 4-bit precision (only 16 discrete values) cannot simultaneously satisfy ranking constraints and represent the dynamic range needed for attention scores, leading to over-constrained optimization.
 
 \subsection{Layer-Wise Sensitivity Analysis}
 
-\begin{table}[t]
+\begin{table}[htbp]
 \centering
 \caption{Top-5 most sensitive and most robust layers in DeiT-Tiny (49 quantizable layers total).}
 \label{tab:layer_sensitivity}
@@ -360,9 +356,9 @@ A surprising finding is the stark difference in quantization robustness between 
 
 Our ranking-aware quantization experiments reveal a nuanced picture of transformer-specific quantization strategies. At 8-bit and 6-bit precision, preserving attention score rankings provides consistent improvements (+0.08-0.10\%), validating the core insight from~\cite{liu2021ptqvit} that relative orderings matter more than absolute values in the attention mechanism.
 
-However, at 4-bit precision, the ranking-aware approach fails catastrophically (-8.14\% vs. standard PTQ). This occurs due to \textbf{quantization grid coarseness}: with only 16 discrete values, adjacent attention scores inevitably collapse to the same quantized value, making it impossible to preserve fine-grained rankings. The ranking constraint becomes an over-constraint, forcing the optimization into poor local minima.
+However, at 4-bit precision, the ranking-aware approach fails catastrophically (-8.14\% vs. standard PTQ). This occurs due to quantization grid coarseness: with only 16 discrete values, adjacent attention scores inevitably collapse to the same quantized value, making it impossible to preserve fine-grained rankings. The ranking constraint becomes an over-constraint, forcing the optimization into poor local minima.
 
-\textbf{Practical implication}: Ranking-aware quantization should be used for 8-bit and 6-bit deployment, but standard PTQ is preferable for 4-bit. For viable 4-bit transformers, quantization-aware training (QAT) is likely necessary.
+Practical implication: Ranking-aware quantization should be used for 8-bit and 6-bit deployment, but standard PTQ is preferable for 4-bit. For viable 4-bit transformers, quantization-aware training (QAT) is likely necessary.
 
 \subsection{Architectural Insights from Layer Sensitivity}
 
@@ -380,13 +376,13 @@ This suggests a general principle: \textit{layers with high-dimensional transfor
 
 Our work has several important limitations:
 
-\textbf{Theoretical energy model.} Our energy estimates use analytical approximations rather than measurements from actual hardware. The MAC-to-memory energy ratio (1:200) and scaling laws ($E_{\text{MAC}} \propto b^2$, $E_{\text{DRAM}} \propto b$) are based on literature values and may not accurately reflect specific target platforms.
+\textbf{Theoretical energy model:} our energy estimates use analytical approximations rather than measurements from actual hardware. The MAC-to-memory energy ratio (1:200) and scaling laws ($E_{\text{MAC}} \propto b^2$, $E_{\text{DRAM}} \propto b$) are based on literature values and may not accurately reflect specific target platforms.
 
-\textbf{Limited baseline comparisons.} We do not compare against state-of-the-art PTQ methods such as GPTQ~\cite{frantar2022gptq}, AWQ~\cite{lin2023awq}, or SmoothQuant~\cite{xiao2022smoothquant}, which have shown strong results on transformer quantization.
+\textbf{Limited baseline comparisons:} we do not compare against state-of-the-art PTQ methods such as GPTQ~\cite{frantar2022gptq}, AWQ~\cite{lin2023awq}, or SmoothQuant~\cite{xiao2022smoothquant}, which have shown strong results on transformer quantization.
 
-\textbf{Evaluation scale.} DeiT-Tiny was evaluated on a 10,000-image subset of ImageNet rather than the full 50,000-image validation set. Additionally, our ResNet-18 baseline (61.44\%) is below typical reported accuracies (~75-78\%) for well-tuned models on CIFAR-100.
+\textbf{Evaluation scale:} DeiT-Tiny was evaluated on a 10,000-image subset of ImageNet rather than the full 50,000-image validation set. Additionally, our ResNet-18 baseline (61.44\%) is below typical reported accuracies (~75-78\%) for well-tuned models on CIFAR-100.
 
-\textbf{No hardware validation.} We report theoretical energy savings but do not deploy quantized models on actual edge hardware to measure real latency and power consumption.
+\textbf{No hardware validation:} we report theoretical energy savings but do not deploy quantized models on actual edge hardware to measure real latency and power consumption.
 
 %==============================================================================
 % CONCLUSION AND FUTURE WORK
@@ -398,21 +394,18 @@ We have presented a comprehensive study of post-training quantization and sensit
 \begin{itemize}
     \item PTQ at 8-bit precision achieves near-lossless accuracy with approximately 76\% energy reduction for both CNNs and Transformers.
     \item DeiT-Tiny exhibits remarkable robustness to aggressive quantization, maintaining 85.01\% accuracy at 6-bit and 83.04\% at 4-bit.
-    \item \textbf{Ranking-aware PTQ} improves accuracy by +0.08-0.10\% at 8/6-bit precision for Vision Transformers, but fails at 4-bit due to quantization grid coarseness.
-    \item \textbf{Layer sensitivity analysis} reveals that MLP feed-forward layers are 4.7$\times$ more sensitive than attention projections, providing clear guidance for mixed-precision allocation.
+    \item Ranking-aware PTQ improves accuracy by +0.08-0.10\% at 8/6-bit precision for Vision Transformers, but fails at 4-bit due to quantization grid coarseness.
+    \item Layer sensitivity analysis reveals that MLP feed-forward layers are 4.7$\times$ more sensitive than attention projections, providing clear guidance for mixed-precision allocation.
     \item Mixed-precision assignment based on layer sensitivity provides favorable accuracy-energy trade-offs, achieving 85.7\% energy reduction for ResNet-18 and 80.9\% for DeiT-Tiny with minimal accuracy loss.
     \item Memory access dominates inference energy (93-99\%), making bitwidth reduction particularly effective for efficiency gains.
-\end{itemize}
+\end{itemize} \
 
-\textbf{Future directions} include: (1) deploying quantized models on edge hardware (NVIDIA Jetson, mobile NPUs) for real energy measurements; (2) comparing against state-of-the-art PTQ methods; (3) exploring quantization-aware training for recovering accuracy at aggressive compression levels; (4) investigating learned step sizes and asymmetric quantization for improved 4-bit performance; and (5) extending to other domains such as object detection and semantic segmentation.
+Future directions include: (1) deploying quantized models on edge hardware (NVIDIA Jetson, mobile NPUs) for real energy measurements; (2) comparing against state-of-the-art PTQ methods; (3) exploring quantization-aware training for recovering accuracy at aggressive compression levels; (4) investigating learned step sizes and asymmetric quantization for improved 4-bit performance; and (5) extending to other domains such as object detection and semantic segmentation.
 
 %==============================================================================
 % REFERENCES
 %==============================================================================
-\bibliographystyle{unsrtnat}
-\bibliography{references}
-
-% Fallback if BibTeX not available
+% Bibliography (using manual thebibliography instead of BibTeX)
 \begin{thebibliography}{20}
 
 \bibitem[Dosovitskiy et al.(2020)]{dosovitskiy2020vit}
