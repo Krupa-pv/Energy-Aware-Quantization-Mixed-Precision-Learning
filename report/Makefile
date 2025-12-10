@@ -1,6 +1,7 @@
 # Makefile for LaTeX report compilation
 
 MAIN = main
+SLIDES = slides
 LATEX = pdflatex
 BIBTEX = bibtex
 
@@ -23,6 +24,11 @@ full: $(MAIN).tex neurips_2024.sty references.bib
 clean:
 	rm -f *.aux *.bbl *.blg *.log *.out *.toc *.lof *.lot *.fls *.fdb_latexmk *.synctex.gz
 
+slides: $(SLIDES).tex neurips_2024.sty
+	$(LATEX) $(SLIDES).tex
+	$(LATEX) $(SLIDES).tex
+	@echo "Slides compiled successfully: $(SLIDES).pdf"
+
 view: $(MAIN).pdf
 	open $(MAIN).pdf  # macOS
 	# xdg-open $(MAIN).pdf  # Linux
@@ -32,4 +38,3 @@ view: $(MAIN).pdf
 overleaf: $(MAIN).tex
 	$(LATEX) $(MAIN).tex
 	$(LATEX) $(MAIN).tex
-
