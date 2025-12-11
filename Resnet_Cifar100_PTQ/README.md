@@ -13,13 +13,13 @@ This repository includes all code needed for:
 
 ## Train the FP32 ResNet-18 Baseline
 On an HPC node, run:
-'''
+`
 sbatch train_resnet.slurm
-'''
+`
 produces:
-'''
+`
 resnet18_cifar100_trained.pth
-'''
+`
 
 ## Run Post-Training Quantization (8/6/4-bit)
 We implement uniform symmetric PTQ using runtime forward hooks:
