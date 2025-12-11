@@ -27,15 +27,11 @@ We implement uniform symmetric PTQ using runtime forward hooks:
 - forward_hook → quantize activations after each layer
 
 Run PTQ for each precision level on an HPC node:
-'''
+`
 sbatch run_resnet_ptq.slurm
-'''
+`
 produces:
-'''
-resnet18_ptq_4bit.pth
-resnet18_ptq_6bit.pth
-resnet18_ptq_8bit.pth
-'''
+`resnet18_ptq_4bit.pth` , `resnet18_ptq_6bit.pth` , `resnet18_ptq_8bit.pth`
 
 ## Method Summary (Uniform Symmetric PTQ)
 ### 1. Symmetric Uniform Quantization
